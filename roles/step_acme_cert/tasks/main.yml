@@ -2,6 +2,11 @@
 # tasks file for step_acme_cert
 - include: check.yml
 
+- name: Update cert/keyfile dicts with defaults
+  set_fact:
+    step_acme_cert_keyfile: "{{ step_acme_cert_keyfile_defaults | combine(step_acme_cert_keyfile) }}"
+    step_acme_cert_certfile: "{{ step_acme_cert_certfile_defaults | combine(step_acme_cert_certfile) }}"
+
 - name: Look for existing certificate
   stat:
     path: "{{ step_acme_cert_certfile.path }}"
