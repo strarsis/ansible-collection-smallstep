@@ -321,7 +321,10 @@ def run_module():
     # of just loading from file. This means we'd have to include ca_url and handle failures, which we don't want.
     try:
         with open(module.params["ca_config"], "rb") as f:
-            provisioners = json.load(f)["authority"]["provisioners"]
+            provisioners = []
+            ca_config = json.load(f)
+            if ca_config["authority"] and ca_config["authority"]["provisioners"]:
+                provisioners = ca_config["authority"]["provisioners"]
     except Exception as e:
         result["msg"] = "Error reading ca.json config: {err}".format(err=e)
         module.fail_json(**result)
